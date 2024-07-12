@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محرر أكواد HTML, CSS, JS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #121212;
+            color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .editor-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 32%;
+            height: 150px;
+            margin: 5px;
+            font-family: monospace;
+            font-size: 14px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            background-color: #1e1e1e;
+            color: #f0f0f0;
+            padding: 10px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        textarea:focus {
+            transform: scale(1.05);
+            border-color: #61dafb;
+        }
+
+        #output {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #333;
+            background-color: #1e1e1e;
+            transition: height 0.3s ease-in-out, width 0.3s ease-in-out;
+            border-radius: 10px;
+        }
+
+        .output-container {
+            width: 100%;
+            max-width: 1200px;
+            position: relative;
+        }
+
+        button {
+            background-color: #61dafb;
+            color: #282c34;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #21a1f1;
+        }
+
+        .full-screen {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: transparent;
+            border: none;
+            color: #ff9800;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            z-index: 1000; /* Ensure the icon stays on top */
+        }
+
+        .full-screen:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <h1>محرر الاكواد</h1>
+    <div class="editor-container">
+        <textarea id="html-code" placeholder="HTML"></textarea>
+        <textarea id="css-code" placeholder="CSS"></textarea>
+        <textarea id="js-code" placeholder="JS"></textarea>
+    </div>
+
+    <button onclick="runCode()">تشغيل الكود</button>
+    <div class="output-container">
+        <h2>المعاينة</h2>
+        <iframe id="output"></iframe>
+    </div>
+
+    <button class="full-screen" onclick="toggleFullScreen()">
+        <i class="fas fa-expand-arrows-alt"></i>
+    </button>
+
+    <script>
+        function runCode() {
+            const htmlCode = document.getElementById('html-code').value;
+            const cssCode = `<style>${document.getElementById('css-code').value}</style>`;
+            const jsCode = `<script>${document.getElementById('js-code').value}<\/script>`;
+
+            const output = document.getElementById('output');
+            output.contentDocument.body.innerHTML = htmlCode + cssCode + jsCode;
+        }
+
+        function toggleFullScreen() {
+            const output = document.getElementById('output');
+            const isFullScreen = output.style.height === '100vh';
+
+            output.style.height = isFullScreen ? '300px' : '100vh';
+            output.style.width = isFullScreen ? '100%' : '100vw';
+            output.style.position = isFullScreen ? 'relative' : 'fixed';
+            output.style.top = isFullScreen ? '0' : '0';
+            output.style.left = isFullScreen ? '0' : '0';
+            document.querySelector('.full-screen i').classList.toggle('fa-compress-arrows-alt', isFullScreen);
+            document.querySelector('.full-screen i').classList.toggle('fa-expand-arrows-alt', !isFullScreen);
+        }
+
+        // Run the code whenever the textarea content changes
+        document.getElementById('html-code').addEventListener('input', runCode);
+        document.getElementById('css-code').addEventListener('input', runCode);
+        document.getElementById('js-code').addEventListener('input', runCode);
+    </script>
+</body>
+</html>
